@@ -1,5 +1,6 @@
 
 #import "FBNotifyClear.h"
+#import "MBProgressHUD.h"
 
 
 #define kPrefPath @"/private/var/mobile/Library/Preferences/com.twizzyindy.fbnotifyclear.setting.plist"
@@ -48,6 +49,8 @@ static void initPref() {
 
 }
 
+static MBProgressHUD* HUD;
+
 %new
 -(void)clearTapped {
     
@@ -55,7 +58,34 @@ static void initPref() {
     
     UIAlertAction* actionOK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         
+        HUD = [[MBProgressHUD alloc] initWithView:self.navigationController.view];
+        [self.navigationController.view addSubview:HUD];
+        // set determinate mode
+        HUD.mode = MBProgressHUDModeDeterminate;
+        HUD.delegate = nil;
+        HUD.labelText = @"Finding target cache..";
+        [HUD showWhileExecuting:@selector(searchAndDelete) onTarget:self withObject:nil animated:YES];
+
+
+
         
+    }];
+    
+    UIAlertAction* actionCancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction* action) {
+       
+        
+    }];
+    
+    [alert addAction:actionOK];
+    [alert addAction:actionCancel];
+    [self presentViewController:alert animated:YES completion:nil];
+
+}
+
+%new
+-(void) searchAndDelete {
+
+
         FBNotificationsComponentsAdapter* adapter = MSHookIvar<FBNotificationsComponentsAdapter*> (self, "_adapter");
         FBNotificationsListView* notificationsListView = MSHookIvar<FBNotificationsListView*>(self, "_notificationsListView");
 
@@ -94,6 +124,7 @@ static void initPref() {
         
         for (int y = 0; y < itemsInCacheFolder.count; y++) {
             
+            HUD.progress += ( y / itemsInCacheFolder.count) * 25;
             // if found a dir named, "_store_"
             
             if ([[itemsInCacheFolder objectAtIndex:y] hasPrefix:@"_store_"]) {
@@ -111,6 +142,8 @@ static void initPref() {
                 for (int i=0; i < itemsInStoreFolder.count; i++) {
                     
                     // if found a dir named as "default_diskcache_"
+
+                    HUD.progress += ( i / itemsInStoreFolder.count) * 25;
                     
                     if([[itemsInStoreFolder objectAtIndex:i] hasPrefix:@"default_diskcache_"]) {
                         
@@ -126,6 +159,8 @@ static void initPref() {
                         
                         for (int j=0; j < [itemsInDefaultDiskCacheFolder count]; j++) {
                             
+                            HUD.progress += ( j / itemsInDefaultDiskCacheFolder.count) * 25;
+
                             // get files in default_diskcache
                             NSString* strNotification = [[NSString alloc]initWithString:@"notifications"];
                             
@@ -140,13 +175,27 @@ static void initPref() {
                                 if([fileMan fileExistsAtPath:dirNotiFiles isDirectory:0]) {
                                     [fileMan removeItemAtPath:dirNotiFiles error:nil];
                                     
+                                    HUD.progress += 25;
+
                                     HBLogInfo(@"Deleted");
 
-                                    //notifications = [NSArray array];
+                                    adapter = [[%c(FBNotificationsComponentsAdapter) alloc] init];
+                                    notifications = [[NSArray alloc]init];
+
 
                                     [adapter reloadData];
                                     [notificationsListView.tableView reloadData];
-                                    
+
+                                    HUD.progress = 100;
+                                    HUD.labelText = @"Deleted";
+                                    //[HUD hide:YES];
+
+                               //     HBLogInfo(@"\n\n adapter : %@", adapter);
+                              //      HBLogInfo(@"\n\n enqueuedNotifications : %@", enqueuedNotifications);
+                             //       HBLogInfo(@"\n\n notifications : %@ ", notifications);
+                                    // FBMemNotificationStoriesEdge* memNotificationStoriesEdge = MSHookIvar<FBMemNotificationStoriesEdge*>(self, "_chevronNotification");
+                                    // HBLogInfo(@"\n\n memNotificationStoriesEdge : %@ ", memNotificationStoriesEdge);
+                                    // 
                                 }
                                 
                             }
@@ -164,21 +213,6 @@ static void initPref() {
             }
             
         }
-
-
-
-
-        
-    }];
-    
-    UIAlertAction* actionCancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction* action) {
-       
-        
-    }];
-    
-    [alert addAction:actionOK];
-    [alert addAction:actionCancel];
-    [self presentViewController:alert animated:YES completion:nil];
 
 }
 

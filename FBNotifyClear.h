@@ -46,10 +46,15 @@
 
 @end
 
+@interface FBMemNotificationStoriesEdge : NSObject
+
+@end
+
 @interface FBNotificationsViewController : UIViewController {
 
 	FBNotificationsComponentsAdapter *_adapter;
 	FBNotificationsListView *_notificationsListView;
+	FBMemNotificationStoriesEdge *_chevronNotification;
 
 }
 
