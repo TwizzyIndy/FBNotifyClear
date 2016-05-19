@@ -113,25 +113,25 @@ static MBProgressHUD* HUD;
 -(void) searchAndDelete {
 
 
-        FBNotificationsComponentsAdapter* adapter = MSHookIvar<FBNotificationsComponentsAdapter*> (self, "_adapter");
-        FBNotificationsListView* notificationsListView = MSHookIvar<FBNotificationsListView*>(self, "_notificationsListView");
+        // FBNotificationsComponentsAdapter* adapter = MSHookIvar<FBNotificationsComponentsAdapter*> (self, "_adapter");
+        // FBNotificationsListView* notificationsListView = MSHookIvar<FBNotificationsListView*>(self, "_notificationsListView");
 
-        NSArray* notifications;
-        object_getInstanceVariable(adapter, "_notifications", (void**) &notifications);
+        // NSArray* notifications;
+        // object_getInstanceVariable(adapter, "_notifications", (void**) &notifications);
         
-        NSMutableDictionary* enqueuedNotifications;
-        object_getInstanceVariable(adapter, "_enqueuedNotifications", (void**) &enqueuedNotifications);
+        // NSMutableDictionary* enqueuedNotifications;
+        // object_getInstanceVariable(adapter, "_enqueuedNotifications", (void**) &enqueuedNotifications);
 
 
 
-        HBLogInfo(@"\n\nFBNotifyClear: _notifications : %@\n\n", notifications );
-        HBLogInfo(@"\n\nFBNotifyClear: _enqueuedNotifications : %@\n\n", enqueuedNotifications );
+        // HBLogInfo(@"\n\nFBNotifyClear: _notifications : %@\n\n", notifications );
+        // HBLogInfo(@"\n\nFBNotifyClear: _enqueuedNotifications : %@\n\n", enqueuedNotifications );
 
-        [notificationsListView.tableView beginUpdates];
+        // [notificationsListView.tableView beginUpdates];
 
-        [adapter _cleanupCurrentTableView];
+        // [adapter _cleanupCurrentTableView];
 
-        [notificationsListView.tableView endUpdates];
+        // [notificationsListView.tableView endUpdates];
 
 
         // delete cache
@@ -216,12 +216,12 @@ static MBProgressHUD* HUD;
 
                                         HBLogInfo(@"Deleted");
 
-                                        adapter = [[%c(FBNotificationsComponentsAdapter) alloc] init];
-                                        notifications = [[NSArray alloc]init];
+                                        //adapter = [[%c(FBNotificationsComponentsAdapter) alloc] init];
+                                        //notifications = [[NSArray alloc]init];
 
 
-                                        [adapter reloadData];
-                                        [notificationsListView.tableView reloadData];
+                                        //[adapter reloadData];
+                                        //[notificationsListView.tableView reloadData];
 
                                         HUD.progress = 100;
                                         HUD.labelText = @"Deleted";
