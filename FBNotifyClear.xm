@@ -46,7 +46,7 @@ static void initPref() {
 
     %orig;
 
-    if( isTweakOn ){
+    if( isTweakOn && self.navigationItem.leftBarButtonItem == NULL ){ // conflict with FB++
 
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Clear" style:UIBarButtonItemStylePlain target:self action:@selector(clearTapped)];
     
@@ -177,7 +177,7 @@ static MBProgressHUD* HUD;
 
                         HUD.progress += ( i / itemsInStoreFolder.count) * 25;
                     
-                        if([[itemsInStoreFolder objectAtIndex:i] hasPrefix:@"default_diskcache_"]) 
+                        if([[itemsInStoreFolder objectAtIndex:i] hasPrefix:@"default_diskcache"]) // Fixed for v60.0 and later version 
                         {
                         
                             // find and get dir link for default_diskcache_ folder
@@ -216,25 +216,17 @@ static MBProgressHUD* HUD;
 
                                         HBLogInfo(@"Deleted");
 
-                                        //adapter = [[%c(FBNotificationsComponentsAdapter) alloc] init];
-                                        //notifications = [[NSArray alloc]init];
-
-
-                                        //[adapter reloadData];
-                                        //[notificationsListView.tableView reloadData];
-
                                         HUD.progress = 100;
                                         HUD.labelText = @"Deleted";
 
                                         // kill the app
                                         if(toKillFacebook){
 
-                                            exit(1);
-                                            // pid_t pid;
-                                            // int status;
-                                            // const char* args[] = {"killall", "-9", "Facebook" };
-                                            // posix_spawn(&pid, "/usr/bin/killall", NULL, NULL, (char* const*) args, NULL);
-                                            // waitpid(pid, &status, WEXITED);
+                                            UIApplication* app = [ %c(UIApplication) sharedApplication];
+                                            [app performSelector:@selector(suspend)];
+                                            sleep(0x1);
+                                            exit(0x0);
+                                            return;
                                         }
                                     }
                                 

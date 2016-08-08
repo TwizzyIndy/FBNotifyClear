@@ -23,6 +23,24 @@
 
 @end
 
+@protocol FBAlertViewCoordinatorProtocol <NSObject>
+- (unsigned long long)showAlertViewWithTitle:(NSString *)arg1 message:(NSString *)arg2 configuration:(void (^)(UIAlertView *))arg3 completion:(void (^)(UIAlertView *, long long, _Bool))arg4 cancelButtonTitle:(NSString *)arg5 otherButtonTitles:(NSString *)arg6;
+@end
+
+
+@interface FBAlertViewCoordinator : NSObject <UIAlertViewDelegate, FBAlertViewCoordinatorProtocol>
+{
+    
+}
+
++ (id)sharedCoordinator;
+- (id)alertViewWithTitle:(id)arg1 message:(id)arg2 delegate:(id)arg3 cancelButtonTitle:(id)arg4 otherButtonTitlesCollection:(id)arg5;
+- (id)alertViewWithTitle:(id)arg1 message:(id)arg2 delegate:(id)arg3 cancelButtonTitle:(id)arg4 otherButtonTitles:(id)arg5;
+- (void)alertView:(id)arg1 clickedButtonAtIndex:(long long)arg2;
+- (void)alertView:(id)arg1 didDismissWithButtonIndex:(long long)arg2;
+
+@end
+
 @interface FBNotificationsListView : UIView {
 	FBUpdateAnnouncingTableView* _tableView;
 }

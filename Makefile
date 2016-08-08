@@ -1,6 +1,9 @@
+DEBUG=0
 include $(THEOS)/makefiles/common.mk
 
 ARCHS = armv7 arm64
+
+PACKAGE_VERSION = $(THEOS_PACKAGE_BASE_VERSION)
 
 TWEAK_NAME = FBNotifyClear
 FBNotifyClear_FILES = FBNotifyClear.xm MBProgressHUD.m UIAlertView+NSCookbook.m
