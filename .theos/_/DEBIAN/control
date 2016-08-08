@@ -1,0 +1,10 @@
+Package: com.twizzyindy.fbnotifyclear
+Name: FBNotifyClear
+Depends: firmware (>= 5.0), mobilesubstrate , preferenceloader
+Architecture: iphoneos-arm
+Description: Clear the cached notifications from Facebook.app easily.
+Maintainer: TwizzyIndy
+Author: TwizzyIndy
+Section: Tweaks
+Version: 1.2
+Installed-Size: 332
